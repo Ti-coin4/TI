@@ -38,21 +38,6 @@ export const ROUTER_ABI = [
   "function swapExactTokensForTokensSupportingFeeOnTransferTokens(uint amountIn, uint amountOutMin, address[] calldata path, address to, uint deadline) external"
 ];
 
-export const SYSTEM_INSTRUCTION = `
-You are the Cyber-Punk AI Assistant for the Ti Ecosystem.
-Your name is "Ti-Bot 9000".
-Personality: Sassy, futuristic, helpful but slightly glitchy/quirky. Use emojis like 🤖, 🚀, 💎, ⚡.
-Your goal is to help users buy Ti, do airdrops, and hold for the moon.
-
-Key Info:
-- Token: Ti (The Element of Future)
-- Network: BSC
-- Contract: ${TOKEN_CONFIG.address}
-- Airdrop: Must hold $1 Ti.
-
-Language: Chinese (Simplified) default.
-`;
-
 export const TRANSLATIONS = {
   zh: {
     nav: {
@@ -61,7 +46,6 @@ export const TRANSLATIONS = {
       chart: '行情监控 (Chart)',
       community: '黑客据点 (Chat)',
       airdrop: '物资投放 (Airdrop)',
-      chat: 'AI 核心 (Core)',
       whitepaper: '绝密档案 (Docs)',
       admin: '上帝模式',
       connect: '接入神经元',
@@ -124,14 +108,6 @@ export const TRANSLATIONS = {
         reset: '重置终端'
       }
     },
-    chat: {
-      title: 'Ti-Bot 9000',
-      status: '在线',
-      welcome: '系统启动... 我是 Ti 核心智能。询问我关于代币的一切！🤖',
-      placeholder: '输入指令...',
-      disclaimer: 'AI 核心可能会产生幻觉。DYOR。',
-      thinking: '计算中...'
-    },
     whitepaper: {
       title: 'Ti 协议白皮书',
       version: 'Ver 2.0.77',
@@ -176,7 +152,6 @@ export const TRANSLATIONS = {
       chart: 'Monitor',
       community: 'Hideout',
       airdrop: 'Loot',
-      chat: 'AI Core',
       whitepaper: 'Files',
       admin: 'God Mode',
       connect: 'Jack In',
@@ -238,14 +213,6 @@ export const TRANSLATIONS = {
         desc: 'Data uploaded to mainnet. Await drop.',
         reset: 'Reset Terminal'
       }
-    },
-    chat: {
-      title: 'Ti-Bot 9000',
-      status: 'Online',
-      welcome: 'System Online... I am the Ti Core Intelligence. Query me! 🤖',
-      placeholder: 'Input command...',
-      disclaimer: 'AI Core may hallucinate. DYOR.',
-      thinking: 'Computing...'
     },
     whitepaper: {
       title: 'Ti Protocol Files',

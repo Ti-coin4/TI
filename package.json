@@ -1,5 +1,5 @@
 {
-  "name": "copy-of-ti---官网",
+  "name": "ti---官网",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,7 +12,6 @@
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "lucide-react": "^0.555.0",
-    "@google/genai": "^1.30.0",
     "ethers": "6.11.1"
   },
   "devDependencies": {

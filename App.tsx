@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { Airdrop } from './components/Airdrop';
-import { Chat } from './components/Chat';
 import { Swap } from './components/Swap';
 import { CommunityChat } from './components/CommunityChat';
 import { AdminPanel } from './components/AdminPanel';
-import { Whitepaper } from './components/Whitepaper'; // Import Whitepaper
+import { Whitepaper } from './components/Whitepaper';
 import { Language, WalletState, PublicMessage, SiteConfig, AirdropEntry } from './types';
 import { TRANSLATIONS, TOKEN_CONFIG, ADMIN_CREDENTIALS } from './constants';
 import { connectToBSC, getTokenBalance, fetchTokenPrice, isWalletDetected } from './services/web3Service';
@@ -246,8 +245,6 @@ const App: React.FC = () => {
         );
       case 'airdrop':
         return <Airdrop lang={lang} wallet={wallet} connectWallet={handleConnectWallet} onSubmit={handleAirdropSubmit} />;
-      case 'chat':
-        return <Chat lang={lang} />;
       case 'whitepaper': // Added Whitepaper route
         return <Whitepaper lang={lang} />;
       default:

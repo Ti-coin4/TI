@@ -36,7 +36,6 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'whitepaper', label: t.whitepaper },
     { id: 'community', label: t.community },
     { id: 'airdrop', label: t.airdrop },
-    { id: 'chat', label: t.chat },
     { id: 'admin', label: t.admin },
   ];
 
