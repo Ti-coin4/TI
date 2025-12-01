@@ -12,7 +12,7 @@ export const TOKEN_CONFIG = {
 };
 
 export const BSC_CHAIN_ID = '0x38'; // 56 in hex
-export const BSC_RPC_URL = 'https://bsc-dataseed1.binance.org/';
+export const BSC_RPC_URL = 'https://bsc-dataseed.binance.org/';
 
 export const ADMIN_CREDENTIALS = {
   username: '229859',

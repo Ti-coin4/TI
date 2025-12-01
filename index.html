@@ -3,18 +3,18 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- SEO & OpenGraph -->
-    <title>Ti | The Glitch in the Matrix</title>
-    <meta name="description" content="Ti - BSC链上的终极形态。安全、极速、去中心化交易与空投生态。" />
-    <meta property="og:title" content="Ti | The Glitch in the Matrix" />
-    <meta property="og:description" content="加入Ti社区。体验BSC链上最纯粹的去中心化交易与治理实验。" />
+    <meta name="description" content="Ti - The Glitch in the Matrix. Decentralized Ecosystem on BSC." />
+    <meta property="og:title" content="Ti | Cyberpunk DApp" />
+    <meta property="og:description" content="Join the revolution. Secure, fast, decentralized trading and airdrops on BSC." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://raw.githubusercontent.com/gepengyuyan69-crypto/ti-token-logo-2-/refs/heads/main/logo.png" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <title>Ti | The Glitch in the Matrix</title>
     
+    <!-- Tailwind via CDN for simplicity in keeping custom config -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    
     <script>
       tailwind.config = {
         theme: {
@@ -39,8 +39,9 @@
               'float': 'float 6s ease-in-out infinite',
               'glitch': 'glitch 1s linear infinite',
               'scan': 'scan 4s linear infinite',
-              'fade-in': 'fadeIn 0.5s ease-out forwards',
-              'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
+              'fade-in': 'fadeIn 0.5s ease-out',
+              'fade-in-up': 'fadeInUp 0.7s ease-out',
+              'fade-in-down': 'fadeInDown 0.3s ease-out',
             },
             keyframes: {
               float: {
@@ -62,6 +63,10 @@
               },
               fadeInUp: {
                 '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              },
+              fadeInDown: {
+                '0%': { opacity: '0', transform: 'translateY(-10px)' },
                 '100%': { opacity: '1', transform: 'translateY(0)' },
               }
             }
@@ -104,6 +109,16 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #bd00ff;
+      }
+      
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 4px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(0, 243, 255, 0.05);
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(0, 243, 255, 0.3);
       }
 
       /* Glitch Text Utility */
@@ -153,17 +168,18 @@
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
-    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "ethers": "https://esm.sh/ethers@6.13.5",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
+    "ethers": "https://aistudiocdn.com/ethers@^6.15.0",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "vite": "https://aistudiocdn.com/vite@^7.2.4"
   }
 }
 </script>
 </head>
   <body>
     <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
   </body>
 </html>
