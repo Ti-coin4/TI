@@ -1,4 +1,4 @@
-import { ethers, TransactionReceipt } from 'ethers';
+import * as ethers from 'ethers';
 import { TOKEN_CONFIG, ERC20_ABI, ROUTER_ABI, BSC_CHAIN_ID } from '../constants';
 
 // Declare window type for Ethereum provider
@@ -8,9 +8,24 @@ declare global {
   }
 }
 
+// Destructure mostly used safely
+const { 
+  BrowserProvider, 
+  Contract, 
+  formatEther, 
+  formatUnits, 
+  parseUnits, 
+  parseEther, 
+  MaxUint256 
+} = ethers;
+
 export const getProvider = () => {
   if (typeof window !== 'undefined' && window.ethereum) {
-    return new ethers.BrowserProvider(window.ethereum);
+    if (!BrowserProvider) {
+      console.error("Ethers.js library failed to load correctly.");
+      return null;
+    }
+    return new BrowserProvider(window.ethereum);
   }
   return null;
 };
@@ -19,8 +34,17 @@ export const isWalletDetected = () => {
   return typeof window !== 'undefined' && typeof window.ethereum !== 'undefined';
 };
 
+// Retry utility for mobile wallets that might inject 'window.ethereum' slightly later
+const waitForWallet = async (retries = 3, interval = 500): Promise<boolean> => {
+    if (isWalletDetected()) return true;
+    if (retries === 0) return false;
+    await new Promise(resolve => setTimeout(resolve, interval));
+    return waitForWallet(retries - 1, interval);
+};
+
 export const connectToBSC = async () => {
-  if (!isWalletDetected()) {
+  const walletExists = await waitForWallet();
+  if (!walletExists) {
     throw new Error("WALLET_NOT_FOUND");
   }
   
@@ -47,7 +71,7 @@ export const connectToBSC = async () => {
                 symbol: 'BNB',
                 decimals: 18,
               },
-              rpcUrls: ['https://bsc-dataseed.binance.org/'],
+              rpcUrls: ['https://bsc-dataseed1.binance.org/'],
               blockExplorerUrls: ['https://bscscan.com/'],
             },
           ],
@@ -57,7 +81,7 @@ export const connectToBSC = async () => {
       }
     }
     
-    const provider = new ethers.BrowserProvider(window.ethereum);
+    const provider = new BrowserProvider(window.ethereum);
     const signer = await provider.getSigner();
     const address = await signer.getAddress();
     
@@ -76,13 +100,13 @@ export const getTokenBalance = async (walletAddress: string, tokenAddress: strin
     // Check for Native BNB
     if (tokenAddress === 'BNB') {
       const balance = await provider.getBalance(walletAddress);
-      return parseFloat(ethers.formatEther(balance));
+      return parseFloat(formatEther(balance));
     }
 
-    const contract = new ethers.Contract(tokenAddress, ERC20_ABI, provider);
+    const contract = new Contract(tokenAddress, ERC20_ABI, provider);
     const balance = await contract.balanceOf(walletAddress);
     const decimals = await contract.decimals();
-    return parseFloat(ethers.formatUnits(balance, decimals));
+    return parseFloat(formatUnits(balance, decimals));
   } catch (error) {
     // console.warn(`Failed to fetch balance for ${tokenAddress}`, error);
     return 0;
@@ -117,51 +141,45 @@ export const getSwapQuote = async (
     const provider = getProvider();
     if (!provider) return { amountOut: '0', path: [] };
     
-    const router = new ethers.Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, provider);
+    const router = new Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, provider);
     
     const actualTokenIn = tokenInAddress === 'BNB' ? TOKEN_CONFIG.wbnbAddress : tokenInAddress;
     const actualTokenOut = tokenOutAddress === 'BNB' ? TOKEN_CONFIG.wbnbAddress : tokenOutAddress;
 
     // Routing Logic:
-    // 1. Direct pair?
-    // 2. Via WBNB?
     let path = [actualTokenIn, actualTokenOut];
     
-    // If neither is WBNB and different, usually route through WBNB
     if (actualTokenIn.toLowerCase() !== TOKEN_CONFIG.wbnbAddress.toLowerCase() && 
         actualTokenOut.toLowerCase() !== TOKEN_CONFIG.wbnbAddress.toLowerCase()) {
        path = [actualTokenIn, TOKEN_CONFIG.wbnbAddress, actualTokenOut];
     }
     
-    // Optimization: If tokens are same, return amountIn
     if (actualTokenIn.toLowerCase() === actualTokenOut.toLowerCase()) {
         return { amountOut: amountIn, path: [actualTokenIn] };
     }
 
     let decimals = 18;
     if (tokenInAddress !== 'BNB') {
-       const tokenContract = new ethers.Contract(tokenInAddress, ERC20_ABI, provider);
+       const tokenContract = new Contract(tokenInAddress, ERC20_ABI, provider);
        decimals = await tokenContract.decimals();
     }
-    const amountInWei = ethers.parseUnits(amountIn, decimals);
+    const amountInWei = parseUnits(amountIn, decimals);
 
     const amounts = await router.getAmountsOut(amountInWei, path);
     
-    // Get decimals for output
     let outDecimals = 18;
     if (tokenOutAddress !== 'BNB') {
-       const tokenOutContract = new ethers.Contract(tokenOutAddress, ERC20_ABI, provider);
+       const tokenOutContract = new Contract(tokenOutAddress, ERC20_ABI, provider);
        outDecimals = await tokenOutContract.decimals();
     }
 
-    const amountOut = ethers.formatUnits(amounts[amounts.length - 1], outDecimals);
+    const amountOut = formatUnits(amounts[amounts.length - 1], outDecimals);
 
     return {
       amountOut,
       path
     };
   } catch (error) {
-    // Silently fail for 0 input or invalid state
     return { amountOut: '0', path: [] };
   }
 };
@@ -173,7 +191,7 @@ export const estimateSwapGas = async (
   signer: ethers.JsonRpcSigner
 ): Promise<{ gasBNB: string; gasUSD: string }> => {
    try {
-     const router = new ethers.Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, signer);
+     const router = new Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, signer);
      const address = await signer.getAddress();
      const deadline = Math.floor(Date.now() / 1000) + 1200;
 
@@ -184,10 +202,10 @@ export const estimateSwapGas = async (
 
      let decimals = 18;
      if (tokenInAddress !== 'BNB') {
-        const t = new ethers.Contract(tokenInAddress, ERC20_ABI, signer);
+        const t = new Contract(tokenInAddress, ERC20_ABI, signer);
         decimals = await t.decimals();
      }
-     const amountInWei = ethers.parseUnits(amountIn, decimals);
+     const amountInWei = parseUnits(amountIn, decimals);
      const amountOutMinWei = 0; // Estimate only
 
      let estimatedGasLimit = 300000n; // Safer default
@@ -199,13 +217,12 @@ export const estimateSwapGas = async (
             amountOutMinWei, path, address, deadline, { value: amountInWei }
          );
        } else if (tokenOutAddress === 'BNB') {
-          // Selling for BNB - Check allowance first to give accurate estimate
-          const tokenIn = new ethers.Contract(tokenInAddress, ERC20_ABI, signer);
+          // Selling for BNB
+          const tokenIn = new Contract(tokenInAddress, ERC20_ABI, signer);
           const allowance = await tokenIn.allowance(address, TOKEN_CONFIG.routerAddress);
           
           if (allowance < amountInWei) {
-             // Need approve + swap. Hard to estimate compound tx, so we use a safe upper bound
-             estimatedGasLimit = 400000n;
+             estimatedGasLimit = 400000n; // Approve + Swap
           } else {
              estimatedGasLimit = await router.swapExactTokensForETHSupportingFeeOnTransferTokens.estimateGas(
                 amountInWei, amountOutMinWei, path, address, deadline
@@ -213,7 +230,7 @@ export const estimateSwapGas = async (
           }
        } else {
          // Token to Token
-          const tokenIn = new ethers.Contract(tokenInAddress, ERC20_ABI, signer);
+          const tokenIn = new Contract(tokenInAddress, ERC20_ABI, signer);
           const allowance = await tokenIn.allowance(address, TOKEN_CONFIG.routerAddress);
           if (allowance < amountInWei) {
              estimatedGasLimit = 450000n;
@@ -231,10 +248,10 @@ export const estimateSwapGas = async (
      const provider = signer.provider;
      const feeData = await provider.getFeeData();
      // Fallback gas price 3 gwei if RPC fails
-     const gasPrice = feeData.gasPrice || ethers.parseUnits('3', 'gwei');
+     const gasPrice = feeData.gasPrice || parseUnits('3', 'gwei');
      
      const costWei = gasPrice * estimatedGasLimit;
-     const costBNB = ethers.formatEther(costWei);
+     const costBNB = formatEther(costWei);
      
      // Approx USD price of BNB (assume $600 for quick display, or we could fetch it)
      const costUSD = (parseFloat(costBNB) * 600).toFixed(2);
@@ -251,9 +268,9 @@ export const executeSwap = async (
   tokenOutAddress: string,
   signer: ethers.JsonRpcSigner,
   slippagePercent: number
-): Promise<TransactionReceipt> => {
+): Promise<ethers.TransactionReceipt> => {
   try {
-    const router = new ethers.Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, signer);
+    const router = new Contract(TOKEN_CONFIG.routerAddress, ROUTER_ABI, signer);
     const address = await signer.getAddress();
     const deadline = Math.floor(Date.now() / 1000) + 60 * 20; // 20 mins
 
@@ -265,11 +282,11 @@ export const executeSwap = async (
     // 2. Calc Min Output
     let outDecimals = 18;
     if (tokenOutAddress !== 'BNB') {
-       const contract = new ethers.Contract(tokenOutAddress, ERC20_ABI, signer);
+       const contract = new Contract(tokenOutAddress, ERC20_ABI, signer);
        outDecimals = await contract.decimals();
     }
     
-    const amountOutWei = ethers.parseUnits(amountOutQuote, outDecimals);
+    const amountOutWei = parseUnits(amountOutQuote, outDecimals);
     
     // Calculate slippage: (100 - slippage) / 100
     // Using BigInt for precision
@@ -278,7 +295,7 @@ export const executeSwap = async (
 
     if (tokenInAddress === 'BNB') {
       // --- BUYING (BNB -> Token) ---
-      const amountInWei = ethers.parseEther(amountIn);
+      const amountInWei = parseEther(amountIn);
       
       // Check Balance
       const balance = await signer.provider.getBalance(address);
@@ -297,9 +314,9 @@ export const executeSwap = async (
 
     } else {
       // --- SELLING/SWAPPING (Token -> BNB or Token) ---
-      const tokenIn = new ethers.Contract(tokenInAddress, ERC20_ABI, signer);
+      const tokenIn = new Contract(tokenInAddress, ERC20_ABI, signer);
       const decimals = await tokenIn.decimals();
-      const amountInWei = ethers.parseUnits(amountIn, decimals);
+      const amountInWei = parseUnits(amountIn, decimals);
       
       // Check Balance
       const balance = await tokenIn.balanceOf(address);
@@ -311,7 +328,7 @@ export const executeSwap = async (
       const allowance = await tokenIn.allowance(address, TOKEN_CONFIG.routerAddress);
       if (allowance < amountInWei) {
         // console.log("Approving...");
-        const txApprove = await tokenIn.approve(TOKEN_CONFIG.routerAddress, ethers.MaxUint256);
+        const txApprove = await tokenIn.approve(TOKEN_CONFIG.routerAddress, MaxUint256);
         // Wait for approval to be mined before swapping
         await txApprove.wait();
         // console.log("Approved");
@@ -352,9 +369,9 @@ export const sendToken = async (
   signer: ethers.JsonRpcSigner
 ) => {
   try {
-    const contract = new ethers.Contract(tokenAddress, ERC20_ABI, signer);
+    const contract = new Contract(tokenAddress, ERC20_ABI, signer);
     const decimals = await contract.decimals();
-    const amountWei = ethers.parseUnits(amount, decimals);
+    const amountWei = parseUnits(amount, decimals);
     
     // Check balance first
     const address = await signer.getAddress();

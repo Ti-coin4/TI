@@ -3,7 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- SEO & OpenGraph -->
     <title>Ti | The Glitch in the Matrix</title>
+    <meta name="description" content="Ti - BSC链上的终极形态。安全、极速、去中心化交易与空投生态。" />
+    <meta property="og:title" content="Ti | The Glitch in the Matrix" />
+    <meta property="og:description" content="加入Ti社区。体验BSC链上最纯粹的去中心化交易与治理实验。" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://raw.githubusercontent.com/gepengyuyan69-crypto/ti-token-logo-2-/refs/heads/main/logo.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <script>
@@ -30,6 +39,8 @@
               'float': 'float 6s ease-in-out infinite',
               'glitch': 'glitch 1s linear infinite',
               'scan': 'scan 4s linear infinite',
+              'fade-in': 'fadeIn 0.5s ease-out forwards',
+              'fade-in-up': 'fadeInUp 0.7s ease-out forwards',
             },
             keyframes: {
               float: {
@@ -44,6 +55,14 @@
               scan: {
                 '0%': { backgroundPosition: '0% 0%' },
                 '100%': { backgroundPosition: '0% 100%' },
+              },
+              fadeIn: {
+                '0%': { opacity: '0' },
+                '100%': { opacity: '1' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(20px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
               }
             }
           }
@@ -134,10 +153,12 @@
 {
   "imports": {
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-dom/client": "https://aistudiocdn.com/react-dom@^19.2.0/client",
+    "react-dom": "https://aistudiocdn.com/react-dom@^19.2.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0",
-    "ethers": "https://esm.sh/ethers@6.11.1"
+    "ethers": "https://esm.sh/ethers@6.13.5",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
