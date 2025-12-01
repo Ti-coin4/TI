@@ -105,6 +105,9 @@ const App: React.FC = () => {
 
     try {
       const { address } = await connectToBSC();
+      
+      if (!address) throw new Error("No address returned");
+
       // Fetch balances
       const balTi = await getTokenBalance(address, TOKEN_CONFIG.address);
       const balUSDT = await getTokenBalance(address, TOKEN_CONFIG.usdtAddress);
@@ -130,9 +133,10 @@ const App: React.FC = () => {
   const handleSwapSuccess = (amountIn: number, amountOut: number) => {
     // Refresh balances after swap
     if (wallet.address) {
-       getTokenBalance(wallet.address, TOKEN_CONFIG.address).then(ti => {
-         getTokenBalance(wallet.address, TOKEN_CONFIG.usdtAddress).then(usdt => {
-           getTokenBalance(wallet.address, 'BNB').then(bnb => {
+       const addr = wallet.address; // Capture string type for closure
+       getTokenBalance(addr, TOKEN_CONFIG.address).then(ti => {
+         getTokenBalance(addr, TOKEN_CONFIG.usdtAddress).then(usdt => {
+           getTokenBalance(addr, 'BNB').then(bnb => {
              setWallet(prev => ({...prev, balanceTi: ti, balanceUSDT: usdt, balanceBNB: bnb}));
            });
          });
