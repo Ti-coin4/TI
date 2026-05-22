@@ -2,13 +2,13 @@
 export const TOKEN_CONFIG = {
   name: "Ti",
   symbol: "Ti",
-  address: "0x8b5be89c0f4eabbe51fd13cf21824b65b79527f3",
+  address: "0x6f62F32C63795Fa4f7DA69878003F1cAC273FFff",
   usdtAddress: "0x55d398326f99059fF775485246999027B3197955", // BSC USDT
   wbnbAddress: "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", // WBNB
   routerAddress: "0x10ED43C718714eb63d5aA57B78B54704E256024E", // PancakeSwap V2 Router
   telegram: "https://t.me/TI_Coin_Community",
   twitter: "https://twitter.com/TiCoinOfficial", 
-  buyLink: "https://pancakeswap.finance/swap?outputCurrency=0x8b5be89c0f4eabbe51fd13cf21824b65b79527f3"
+  buyLink: "https://pancakeswap.finance/swap?outputCurrency=0x6f62F32C63795Fa4f7DA69878003F1cAC273FFff"
 };
 
 export const BSC_CHAIN_ID = '0x38'; // 56 in hex
