@@ -52,22 +52,22 @@ export const TRANSLATIONS = {
       disconnect: '断开连接'
     },
     hero: {
-      badge: '>>> 系统已就绪 <<<',
-      titlePrefix: '觉醒',
-      titleSuffix: '未来',
-      subtitle: '加入赛博革命。BSC链上的终极形态。安全、极速、无政府主义。',
+      badge: '>>> Ti——已到 <<<',
+      titlePrefix: 'MEME',
+      titleSuffix: 'COIN',
+      subtitle: '部署在BSC上的MEME+机制型代币；3%税费用于销毁、分红、注池、运营.....等机制',
       contractLabel: '合约标识码 [BSC]',
       copied: '复制成功!',
       copy: '复制合约',
       buy: '立即购买',
       community: '加入组织',
       features: {
-        secure: '绝对防御',
-        secureDesc: '经量子审计的合约代码，黑客也无法攻破。',
-        fast: '光速传输',
-        fastDesc: '基于 BSC 架构，比光速更快的交易体验。',
-        global: '全球矩阵',
-        globalDesc: '连接全球节点的去中心化意识网络。'
+        secure: '自动添加流动性',
+        secureDesc: '40%用于添加流动性，自动提升稳定性',
+        fast: '持币分红',
+        fastDesc: '25%分配给持有者',
+        global: '自动销毁',
+        globalDesc: '25%自动销毁，强化稀缺性；剩余用于建设'
       }
     },
     airdrop: {
@@ -124,16 +124,16 @@ export const TRANSLATIONS = {
         content: 'Ti 代币 (Ti) 是维持矩阵运行的能量。\n- 总量：1,000,000,000 Ti\n- 网络：BSC (BEP-20)\n- 合约：' + TOKEN_CONFIG.address,
         distribution: [
           '流动性: 40%',
-          '空投: 20%',
-          '营销: 15%',
-          '生态: 15%',
-          '团队: 10%'
+          '空投: 5%',
+          '营销: 5%',
+          '生态: 25%',
+          '分红: 25%'
         ]
       },
       roadmap: {
         title: '4. 演化路径',
         q1: '阶段一：觉醒',
-        q1_items: ['合约部署', '官网由 AI 构建', '空投启动', 'PancakeSwap 初始流动性'],
+        q1_items: ['合约部署', '官网由构建', '空投启动', 'PancakeSwap 初始流动性'],
         q2: '阶段二：扩张',
         q2_items: ['CMC 收录', '中心化交易所登陆', 'AI 进化', '全球节点招募'],
         q3: '阶段三：奇点',
