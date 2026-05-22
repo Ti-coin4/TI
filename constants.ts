@@ -133,7 +133,7 @@ export const TRANSLATIONS = {
       roadmap: {
         title: '4. 演化路径',
         q1: '阶段一：觉醒',
-        q1_items: ['合约部署', '官网由构建', '空投启动', 'PancakeSwap 初始流动性'],
+        q1_items: ['合约部署', '官网构建', '空投启动', 'PancakeSwap 初始流动性'],
         q2: '阶段二：扩张',
         q2_items: ['CMC 收录', '中心化交易所登陆', 'AI 进化', '全球节点招募'],
         q3: '阶段三：奇点',
